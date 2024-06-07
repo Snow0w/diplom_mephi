@@ -1,0 +1,3 @@
+class ClassificationReportException(Exception):
+    pass
+
