@@ -8,12 +8,9 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
 )
-
 from Classifier import Classifier
 from WrongDataException import WrongDataException
 from ClassificationReportException import ClassificationReportException
-
-
 
 
 class Window(QWidget):
@@ -22,16 +19,12 @@ class Window(QWidget):
         super().__init__()
         self.fileName = ""
         self.setWindowTitle("Классификация частиц")
-        # Create a top-level layout
         layout = QVBoxLayout()
         self.setLayout(layout)
-        # Create and connect the combo box to switch between pages
         self.pageCombo = QComboBox()
         self.pageCombo.addItems(["Локальный файл", "Сервер"])
         self.pageCombo.activated.connect(self.switchPage)
-        # Create the stacked layout
         self.stackedLayout = QStackedLayout()
-        # Create the first page
         self.page1 = QWidget()
         self.page1Layout = QVBoxLayout()
         self.page1Button = QPushButton("Выбрать файл")
@@ -41,7 +34,6 @@ class Window(QWidget):
         self.page1Layout.addWidget(self.page1Label)
         self.page1.setLayout(self.page1Layout)
         self.stackedLayout.addWidget(self.page1)
-        # Create the second page
         self.page2 = QWidget()
         self.page2Layout = QVBoxLayout()
         self.page2Button = QPushButton("Подключиться к серверу")
@@ -51,21 +43,16 @@ class Window(QWidget):
         self.page2Layout.addWidget(self.page2Label)
         self.page2.setLayout(self.page2Layout)
         self.stackedLayout.addWidget(self.page2)
-        #Main Label
         mainLabel = QLabel("Источник:")
         layout.addWidget(mainLabel)
-        # Add the combo box and the stacked layout to the top-level layout
         layout.addWidget(self.pageCombo)
         layout.addLayout(self.stackedLayout)
-        # Classifier button
         self.classifierButton = QPushButton("Классифицировать")
         self.classifierButton.clicked.connect(self.classifierButton_was_clicked)
         layout.addWidget(self.classifierButton)
         self.classifierReportButton = QPushButton("Классифицировать с отчетом")
         self.classifierReportButton.clicked.connect(self.classifierReportButton_was_clicked)
         layout.addWidget(self.classifierReportButton)
-
-
         
     def classifierButton_was_clicked(self):
         if self.pageCombo.currentIndex() == self.__WORK_WITH_SERVER_STATE:
@@ -113,7 +100,6 @@ class Window(QWidget):
         except Exception as ex:
             self.fileName = ""
             self.errorDialog("Ошибка", str(ex))
-        # print(os.path.dirname(os.path.abspath(self.fileName)))
 
     def page2button_was_clicked(self):
         self.errorDialog("Ошибка", "Данный функционал не поддерживается")
@@ -123,9 +109,6 @@ class Window(QWidget):
         dlg.setWindowTitle(name)
         dlg.setText(text)
         dlg.exec()
-
-
-
 
     def switchPage(self):
         self.stackedLayout.setCurrentIndex(self.pageCombo.currentIndex())

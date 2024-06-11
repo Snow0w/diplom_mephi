@@ -14,9 +14,8 @@ from umap import UMAP
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from ClassificationReportException import ClassificationReportException
-
-
 from WrongDataException import WrongDataException
+
 
 class Classifier:
     def __init__(self, name):
@@ -105,22 +104,8 @@ class Classifier:
                 )
         prot_num = self.df.query("Label == 0").shape[0]
         elec_num = self.df.query("Label == 1").shape[0]
-        # pdf.cell(
-        #             40, 10,
-        #             f'Number of classified protons: {prot_num}',
-        #             new_x="LMARGIN", new_y="NEXT",
-        #         )
-        # pdf.cell(
-        #             40, 10,
-        #             f'Number of classified electrons: {elec_num}',
-        #             new_x="LMARGIN", new_y="NEXT",
-        #         )
-
-
         self.__add_pie_chart(pdf, prot_num, elec_num)
         self.__add_UMAP_graph(pdf)
-
-
         pdf.add_page()
         pdf.set_font("helvetica", "B", 16)
         pdf.cell(
@@ -129,8 +114,6 @@ class Classifier:
                     new_x="LMARGIN", new_y="NEXT",
                 )
         self.__add_tables(pdf)
-
-
         pdf.output(join(
             filePath,
             self.timeCreationFiles.strftime('Отчет_%H_%M_%d_%m_%Y.pdf')
@@ -155,8 +138,7 @@ class Classifier:
         canvas = FigureCanvas(fig)
         canvas.draw()
         img = Image.fromarray(asarray(canvas.buffer_rgba()))
-
-        pdf.image(img, w=pdf.epw)  # Make the image full width
+        pdf.image(img, w=pdf.epw)
 
     def __add_UMAP_graph(self, pdf):
         pdf.set_font("helvetica", "B", 16)
@@ -199,8 +181,7 @@ class Classifier:
         canvas = FigureCanvas(fig)
         canvas.draw()
         img = Image.fromarray(asarray(canvas.buffer_rgba()))
-
-        pdf.image(img, w=pdf.epw)  # Make the image full width
+        pdf.image(img, w=pdf.epw)
 
     def __add_tables(self, pdf):
         describe = self.df.describe().drop(columns=['Label', 'Unnamed: 0']).astype(str)
@@ -209,12 +190,10 @@ class Classifier:
         cnt = 0
         pdf.set_font("helvetica", "", 10)
         for col in colnames:
-            # if col == 'Unnamed: 0':
-            #     continue
             var = describe[['Metric', col]]
-            COLUMNS = [list(var)]  # Get list of dataframe columns
-            ROWS = var.values.tolist()  # Get list of dataframe rows
-            DATA = COLUMNS + ROWS  # Combine columns and rows in one list
+            COLUMNS = [list(var)]
+            ROWS = var.values.tolist()
+            DATA = COLUMNS + ROWS
             with pdf.table(
                 headings_style = FontFace(emphasis="ITALICS", fill_color=(128, 128, 128)),
                 cell_fill_mode="ROWS",
